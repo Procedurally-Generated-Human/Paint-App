@@ -1,6 +1,7 @@
 package com.example.paint;
 
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
@@ -89,6 +90,13 @@ public class PaintView {
     }
 
     @FXML
+    public void clear(){
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+    }
+
+
+    @FXML
     public void save(){
         FileChooser savefile = new FileChooser();
         savefile.setTitle("Save File");
@@ -107,6 +115,32 @@ public class PaintView {
             }
         }
     }
+
+
+    @FXML
+    public void save_transparent(){
+        FileChooser savefile = new FileChooser();
+        savefile.setTitle("Save File");
+
+        File file = savefile.showSaveDialog(null);
+        System.out.println("is file null ? "+ file);
+        if (file != null) {
+            try {
+                WritableImage writableImage = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight());
+                canvas.snapshot(null, writableImage);
+                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+
+                SnapshotParameters sp = new SnapshotParameters();
+                sp.setFill(Color.TRANSPARENT);
+                ImageIO.write(SwingFXUtils.fromFXImage(canvas.snapshot(sp, writableImage), null), "png", file);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                System.out.println("Error!");
+            }
+        }
+    }
+
+
 
 
 

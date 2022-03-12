@@ -16,7 +16,9 @@
         <items>
             <ColorPicker fx:id="colorpicker" />
             <ChoiceBox fx:id="sizepicker" prefWidth="150.0" />
-            <Button mnemonicParsing="false" text="Save" onAction="#save"/>
+            <Button mnemonicParsing="false" onAction="#clear" text="Clear" />
+            <Button mnemonicParsing="false" onAction="#save" text="Save" />
+            <Button mnemonicParsing="false" onAction="#save_transparent" text="Save (T)" />
         </items>
       </ToolBar>
    </top>
