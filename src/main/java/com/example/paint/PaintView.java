@@ -18,8 +18,9 @@ import java.io.File;
 import java.io.IOException;
 
 // by decreasing the y of linemove by 60 or something you can create a khose khat
+
 public class PaintView {
-    public static Circle c2 = new Circle(1,1,100,Color.GREEN);
+    public static double[] old_c = new double[2];
 
     @FXML
     public Canvas canvas;
@@ -32,59 +33,65 @@ public class PaintView {
     @FXML
     public void initialize() {
         sizepicker.getItems().removeAll(sizepicker.getItems());
-        sizepicker.getItems().addAll("1","2","3","4","5","6","7","8","9","10","15","25","50","100");
+        sizepicker.getItems().addAll("2","4","6","8","10","12","24","50","100");
         sizepicker.getSelectionModel().select("50");
-
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        canvas.setOnMouseDragged(e -> {
+
+        canvas.setOnMouseClicked(e -> {
             double brush_size = Double.parseDouble(sizepicker.getValue());
             double x = e.getX() - brush_size / 2;
             double y = e.getY() - brush_size / 2;
             gc.setFill(colorpicker.getValue());
-            Circle c1 = new Circle(x, y, brush_size, colorpicker.getValue());
-            gc.fillOval(c1.getCenterX(), c1.getCenterY(), c1.getRadius(), c1.getRadius());
+            gc.fillOval(x, y, brush_size, brush_size);
+        });
 
-
-            double x1 = c1.getCenterX();
-            double x2 = c2.getCenterX();
-            double y1 = c1.getCenterY();
-            double y2 = c2.getCenterY();
+        canvas.setOnMouseDragged(e -> {
+            double brush_size = Double.parseDouble(sizepicker.getValue());
+            double x = e.getX() - brush_size / 2;
+            double y = e.getY() - brush_size / 2;
+            if(old_c[0]==0 && old_c[1]==0){
+                old_c[0] = x;
+                old_c[1] = y;
+            }
+            gc.setFill(colorpicker.getValue());
+            gc.fillOval(x, y, brush_size, brush_size);
+            double x1 = x;
+            double x2 = old_c[0];
+            double y1 = y;
+            double y2 = old_c[1];
             double m = (y1 - y2) / (x1 - x2);
             double b = y1 - (m*x1);
-
             double larger = Math.max(x2, x1);
             double smaller = Math.min(x2, x1);
-
             double larger_y = Math.max(y2, y1);
             double smaller_y = Math.min(y2, y1);
-
-
             if(Double.isFinite(m)){
                 for(double i=smaller_y; i!=larger_y; i++){
                     double eq_x = (i-b)/m;
-                    gc.fillOval(eq_x, i, c1.getRadius(), c1.getRadius());
+                    gc.fillOval(eq_x, i, brush_size, brush_size);
                 }
             }
-
             if(Double.isFinite(m)){
                 for(double i=smaller; i!=larger; i++){
                     double eq_y = (m*i) + b;
-                    gc.fillOval(i, eq_y, c1.getRadius(), c1.getRadius());
+                    gc.fillOval(i, eq_y, brush_size, brush_size);
                 }
             }
-
             else if(Double.isInfinite(m)){
                 for(double i=smaller_y; i!=larger_y; i++){
-                    gc.fillOval(x1, i, c1.getRadius(), c1.getRadius());
+                    gc.fillOval(x1, i, brush_size, brush_size);
                 }
             }
-
-            c2 = c1;
-
+            old_c[0] = x;
+            old_c[1] = y;
         });
+
+        canvas.setOnMouseReleased(e -> {
+            old_c[0] = 0;
+            old_c[1] = 0;
+        });
+
     }
-
-
 
 
     @FXML

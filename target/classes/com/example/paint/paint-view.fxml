@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -9,7 +10,10 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.paint.PaintView">
    <center>
-      <Canvas fx:id="canvas" height="560.0" width="800.0" BorderPane.alignment="CENTER" />
+      <Canvas fx:id="canvas" height="560.0" width="800.0" BorderPane.alignment="CENTER">
+         <cursor>
+            <Cursor fx:constant="CROSSHAIR" />
+         </cursor></Canvas>
    </center>
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
