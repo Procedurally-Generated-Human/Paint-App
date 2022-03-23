@@ -7,17 +7,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.WritableImage;
-import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.FileChooser;
-
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 
-// by decreasing the y of linemove by 60 or something you can create a khose khat
 
 public class PaintView {
     public static double[] old_c = new double[2];
@@ -107,7 +104,6 @@ public class PaintView {
         savefile.setTitle("Save File");
 
         File file = savefile.showSaveDialog(null);
-        System.out.println("is file null ? "+ file);
         if (file != null) {
             try {
                 WritableImage writableImage = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight());
@@ -128,7 +124,6 @@ public class PaintView {
         savefile.setTitle("Save File");
 
         File file = savefile.showSaveDialog(null);
-        System.out.println("is file null ? "+ file);
         if (file != null) {
             try {
                 WritableImage writableImage = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight());
