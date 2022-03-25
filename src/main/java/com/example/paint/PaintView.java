@@ -1,15 +1,24 @@
 package com.example.paint;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -138,6 +147,15 @@ public class PaintView {
                 System.out.println("Error!");
             }
         }
+    }
+
+    @FXML
+    public void about() throws IOException {
+        Stage newWindow = new Stage();
+        newWindow.setTitle("About");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("about-view.fxml"));
+        newWindow.setScene(new Scene(loader.load()));
+        newWindow.show();
     }
 
 

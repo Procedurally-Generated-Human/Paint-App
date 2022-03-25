@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="198.0" prefWidth="232.0" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="About">
+         <font>
+            <Font name="System Bold" size="29.0" />
+         </font></Label>
+      <TextArea editable="false" prefHeight="95.0" prefWidth="188.0" text="Made by Procedurally-Generated&#10;-Human in the spring of 2022&#10;with JavaFX&#10;" />
+   </children>
+</VBox>

@@ -5,25 +5,50 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.paint.PaintView">
    <center>
-      <Canvas fx:id="canvas" height="560.0" width="800.0" BorderPane.alignment="CENTER">
+      <Canvas fx:id="canvas" height="538.0" width="800.0" BorderPane.alignment="CENTER">
          <cursor>
             <Cursor fx:constant="CROSSHAIR" />
          </cursor></Canvas>
    </center>
    <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-            <ColorPicker fx:id="colorpicker" />
-            <ChoiceBox fx:id="sizepicker" prefWidth="150.0" />
-            <Button mnemonicParsing="false" onAction="#clear" text="Clear" />
-            <Button mnemonicParsing="false" onAction="#save" text="Save" />
-            <Button mnemonicParsing="false" onAction="#save_transparent" text="Save (T)" />
-        </items>
-      </ToolBar>
+      <VBox prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <Menu mnemonicParsing="false" text="Save Image">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#save" text="Normal" />
+                              <MenuItem mnemonicParsing="false" onAction="#save_transparent" text="Transparent" />
+                          </items>
+                        </Menu>
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" onAction="#about"/>
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <ColorPicker fx:id="colorpicker" />
+                  <ChoiceBox fx:id="sizepicker" prefWidth="150.0" />
+                  <Button mnemonicParsing="false" onAction="#clear" text="Clear" />
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
    </top>
 </BorderPane>
