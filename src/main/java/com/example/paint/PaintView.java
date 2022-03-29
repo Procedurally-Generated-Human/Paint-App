@@ -23,10 +23,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class PaintView {
     public static double[] old_c = new double[2];
+    public String tool = "draw";
 
     @FXML
     public Canvas canvas;
@@ -47,49 +49,93 @@ public class PaintView {
             double brush_size = Double.parseDouble(sizepicker.getValue());
             double x = e.getX() - brush_size / 2;
             double y = e.getY() - brush_size / 2;
-            gc.setFill(colorpicker.getValue());
-            gc.fillOval(x, y, brush_size, brush_size);
+            if(Objects.equals(tool, "draw")) {
+                gc.setFill(colorpicker.getValue());
+                gc.fillOval(x, y, brush_size, brush_size);
+            }
+            else if(Objects.equals(tool, "eraser")){
+                gc.clearRect(x, y, brush_size, brush_size);
+            }
         });
 
         canvas.setOnMouseDragged(e -> {
             double brush_size = Double.parseDouble(sizepicker.getValue());
             double x = e.getX() - brush_size / 2;
             double y = e.getY() - brush_size / 2;
-            if(old_c[0]==0 && old_c[1]==0){
+            if(Objects.equals(tool, "draw")){
+                if (old_c[0] == 0 && old_c[1] == 0) {
+                    old_c[0] = x;
+                    old_c[1] = y;
+                }
+                gc.setFill(colorpicker.getValue());
+                gc.fillOval(x, y, brush_size, brush_size);
+                double x1 = x;
+                double x2 = old_c[0];
+                double y1 = y;
+                double y2 = old_c[1];
+                double m = (y1 - y2) / (x1 - x2);
+                double b = y1 - (m * x1);
+                double larger = Math.max(x2, x1);
+                double smaller = Math.min(x2, x1);
+                double larger_y = Math.max(y2, y1);
+                double smaller_y = Math.min(y2, y1);
+                if (Double.isFinite(m)) {
+                    for (double i = smaller_y; i != larger_y; i++) {
+                        double eq_x = (i - b) / m;
+                        gc.fillOval(eq_x, i, brush_size, brush_size);
+                    }
+                }
+                if (Double.isFinite(m)) {
+                    for (double i = smaller; i != larger; i++) {
+                        double eq_y = (m * i) + b;
+                        gc.fillOval(i, eq_y, brush_size, brush_size);
+                    }
+                } else if (Double.isInfinite(m)) {
+                    for (double i = smaller_y; i != larger_y; i++) {
+                        gc.fillOval(x1, i, brush_size, brush_size);
+                    }
+                }
                 old_c[0] = x;
                 old_c[1] = y;
             }
-            gc.setFill(colorpicker.getValue());
-            gc.fillOval(x, y, brush_size, brush_size);
-            double x1 = x;
-            double x2 = old_c[0];
-            double y1 = y;
-            double y2 = old_c[1];
-            double m = (y1 - y2) / (x1 - x2);
-            double b = y1 - (m*x1);
-            double larger = Math.max(x2, x1);
-            double smaller = Math.min(x2, x1);
-            double larger_y = Math.max(y2, y1);
-            double smaller_y = Math.min(y2, y1);
-            if(Double.isFinite(m)){
-                for(double i=smaller_y; i!=larger_y; i++){
-                    double eq_x = (i-b)/m;
-                    gc.fillOval(eq_x, i, brush_size, brush_size);
+
+            else if(Objects.equals(tool, "eraser")) {
+                if (old_c[0] == 0 && old_c[1] == 0) {
+                    old_c[0] = x;
+                    old_c[1] = y;
                 }
-            }
-            if(Double.isFinite(m)){
-                for(double i=smaller; i!=larger; i++){
-                    double eq_y = (m*i) + b;
-                    gc.fillOval(i, eq_y, brush_size, brush_size);
+                gc.setFill(colorpicker.getValue());
+                gc.clearRect(x, y, brush_size, brush_size);
+                double x1 = x;
+                double x2 = old_c[0];
+                double y1 = y;
+                double y2 = old_c[1];
+                double m = (y1 - y2) / (x1 - x2);
+                double b = y1 - (m * x1);
+                double larger = Math.max(x2, x1);
+                double smaller = Math.min(x2, x1);
+                double larger_y = Math.max(y2, y1);
+                double smaller_y = Math.min(y2, y1);
+                if (Double.isFinite(m)) {
+                    for (double i = smaller_y; i != larger_y; i++) {
+                        double eq_x = (i - b) / m;
+                        gc.clearRect(eq_x, i, brush_size, brush_size);
+                    }
                 }
-            }
-            else if(Double.isInfinite(m)){
-                for(double i=smaller_y; i!=larger_y; i++){
-                    gc.fillOval(x1, i, brush_size, brush_size);
+                if (Double.isFinite(m)) {
+                    for (double i = smaller; i != larger; i++) {
+                        double eq_y = (m * i) + b;
+                        gc.clearRect(i, eq_y, brush_size, brush_size);
+                    }
+                } else if (Double.isInfinite(m)) {
+                    for (double i = smaller_y; i != larger_y; i++) {
+                        gc.clearRect(x1, i, brush_size, brush_size);
+                    }
                 }
+                old_c[0] = x;
+                old_c[1] = y;
             }
-            old_c[0] = x;
-            old_c[1] = y;
+
         });
 
         canvas.setOnMouseReleased(e -> {
@@ -99,6 +145,16 @@ public class PaintView {
 
     }
 
+    @FXML
+    public void change_eraser_state(){
+        colorpicker.setDisable(!colorpicker.isDisabled());
+        if(Objects.equals(tool, "draw")){
+            tool = "eraser";
+        }
+        else if(Objects.equals(tool, "eraser")){
+            tool = "draw";
+        }
+    }
 
     @FXML
     public void clear(){
